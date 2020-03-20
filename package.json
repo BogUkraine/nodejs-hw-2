@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=production node server/server.js",
-    "server": "nodemon server/server.js"
+    "server": "nodemon server/server.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server \" \"npm run client \""
   },
   "repository": {
     "type": "git",
@@ -27,13 +29,17 @@
   },
   "homepage": "https://github.com/BogUkraine/nodejs-hw-2#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^5.1.0",
     "config": "^3.3.0",
     "express": "^4.17.1",
+    "express-validator": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.5",
     "shortid": "^2.2.15"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "nodemon": "^2.0.2"
   }
 }

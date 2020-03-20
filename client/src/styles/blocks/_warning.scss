@@ -1,0 +1,13 @@
+.warning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    width: 200px;
+    height: 60px;
+    padding: 10px;
+    cursor: pointer;
+    background: $warning-background-color;
+}

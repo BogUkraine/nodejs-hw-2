@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import useHttp from '../hooks/http.hook';
+import Warning from './Warning';
+import AuthContext from '../context/AuthContext';
 
 const Auth = () => {
+    const auth = useContext(AuthContext);
     const {loading, error, request, clearError} = useHttp();
+    const [ isFirstCall, setIsFirstCall ] = useState(true);
+    const [ isError, setIsError ] = useState(false);
     const [ form, setForm ] = useState({
         login: '',
         password: '',
     });
+
+    useEffect(() => {
+        if(!isFirstCall) {
+            setIsError(true);
+        }
+        setIsFirstCall(false);
+    }, [error]);
 
     const handleForm = event => {
         setForm({ ...form, [event.target.name]: event.target.value });
@@ -15,12 +27,23 @@ const Auth = () => {
     const registerHandler = async () => {
         try {
             const data = await request('/api/auth/register', 'POST', {...form});
-            console.log(data);
+            console.log(data.message);
         }
         catch(error){
             console.log('Something went wrong')
         };
-    }
+    };
+
+    const loginHandler = async () => {
+        try {
+            const data = await request('/api/auth/login', 'POST', {...form});
+            auth.login(data.token, data.userId);
+        }
+        catch(error){
+            console.log('Something went wrong')
+        };
+    };
+
     return (
         <div className="auth">
             <div className="auth__modal modal">
@@ -42,12 +65,16 @@ const Auth = () => {
                 <div className="modal__footer">
                     <button
                         className="modal__button button button--login"
+                        onClick={loginHandler}
+                        disabled={loading}
                         >Log in</button>
                     <button
                         className="modal__button button button--sign"
-                        onClick={registerHandler}>Sign in</button>
+                        onClick={registerHandler}
+                        disabled={loading}>Sign in</button>
                 </div>
             </div>
+            <Warning visible={isError} message={error} setVisible={setIsError} clearError={clearError}/>
         </div>
     )
 }

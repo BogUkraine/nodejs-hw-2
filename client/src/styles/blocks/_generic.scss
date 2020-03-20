@@ -21,6 +21,11 @@ body {
     &:hover {
         background-color: $button-background-color-hover;
     }
+
+    &:disabled {
+        cursor: initial;
+        background-color: $button-disabled-color;
+    }
 }
 
 .field {

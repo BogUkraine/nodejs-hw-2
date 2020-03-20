@@ -1,0 +1,18 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    width: $sidebar-width;
+    height: $screen-height;
+    background-color: $background-color-dark;
+
+    &__logout {
+        display: flex;
+        justify-content: center;
+    }
+}
