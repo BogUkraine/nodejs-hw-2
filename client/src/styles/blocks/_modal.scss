@@ -1,0 +1,34 @@
+.modal {
+    position: absolute;
+    top: $modal-top;
+    left: $modal-left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: $modal-min-width;
+    width: $modal-width;
+    height: $modal-height;
+    background-color: $modal-background-color;
+    box-shadow: 10px 10px 26px -2px rgba(0,0,0,0.75);
+
+    &__header {
+        font-size: 22px;
+        padding: 10px 20px;
+    }
+
+    &__description {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        height: 100%;
+        padding: 10px 20px;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 10px;
+    }
+}
+

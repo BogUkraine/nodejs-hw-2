@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: $text-color;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    overflow: hidden;
+}
+
+.button {
+    cursor: pointer;
+    outline: 0;
+    width: $button-width;
+    height: $button-height;
+    color: $text-color;
+    background-color: $button-background-color;
+    font-size: $button-text-size;
+    border: 0;
+    transition: all ease 0.3s;
+
+    &:hover {
+        background-color: $button-background-color-hover;
+    }
+}
+
+.field {
+    height: 30px;
+    background-color: transparent;
+    font-size: 18px;
+    color: $text-color;
+    padding: 0 10px;
+    border: 0;
+    border-bottom: 2px solid $field-border-color;
+    outline: 0;
+}
