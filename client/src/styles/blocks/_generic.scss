@@ -37,4 +37,72 @@ body {
     border: 0;
     border-bottom: 2px solid $field-border-color;
     outline: 0;
+    margin: 10px 0;
 }
+
+.checker__label {
+    position: relative;
+}
+
+.checker__label .checker__box {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checker__label .checker__span {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 24px;
+    width: 24px;
+    background-color: transparent;
+    border-radius: 5px;
+    border: 2px solid white;
+}
+
+.checker__label .checker__span:after {
+    position: absolute;
+    content: '';
+    left: 12px;
+    top: 12px;
+    height: 0;
+    width: 0;
+    border-radius: 5px;
+    border: solid $background-color;
+    border-width: 0;
+    transform: rotate(0deg), scale(0);
+    opacity: 1;
+}
+
+.checker__label .checker__box:checked ~ .checker__span {
+    background-color: white;
+    border-radius: 5px;
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+    border: 2px solid white;
+}
+
+.checker__label .checker__box:checked ~ .checker__span:after {
+    transform: rotate(45deg) scale(1);
+    opacity: 1;
+    left: 8px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid $background-color;
+    border-width: 0 2px 2px 0;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+.checker__label .checker__span {
+    transition: all 0.3s ease;
+}
+
+.checker__label .checker__span::after {
+    transition: all 0.3s ease;
+}
+
+// .checker__label .checker__box .checker__span:after

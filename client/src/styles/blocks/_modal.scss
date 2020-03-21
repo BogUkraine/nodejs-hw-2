@@ -7,7 +7,8 @@
     justify-content: space-between;
     min-width: $modal-min-width;
     width: $modal-width;
-    height: $modal-height;
+    min-height: $modal-height;
+    height: auto;
     background-color: $modal-background-color;
     box-shadow: 10px 10px 26px -2px rgba(0,0,0,0.75);
 
@@ -30,5 +31,21 @@
         align-items: center;
         padding: 10px;
     }
+
+    &__overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: $modal-overlay-background;
+    }
 }
 
+.field {
+    &__description {
+        height: 100px;
+        overflow-x: hidden;
+        resize: vertical;
+    }
+}
