@@ -2,29 +2,41 @@ import React, { useState, useRef, useEffect, useContext } from 'react';
 import useHttp from '../hooks/http.hook';
 import Todos from './Todos';
 import AuthContext from '../context/AuthContext';
+import ModalEdit from './ModalEdit';
+import ModalCreate from './ModalCreate';
 
 const Main = () => {
     const auth = useContext(AuthContext);
-    const {loading, request} = useHttp();
+    const { loading, request } = useHttp();
     const inputTitle = useRef();
     const inputDescription = useRef();
-    const [ isModalVisible, setIsModalVisible ] = useState(false);
+    const [ isModalCreateVisible, setIsModalCreateVisible ] = useState(false);
+    const [ isModalEditVisible, setIsModalEditVisible ] = useState(false);
     const [ todoList, setTodoList ] = useState([]);
     const [ form, setForm ] = useState({
         title: '',
         description: ''
     });
+    const [ shouldUpdate, setShouldUpdate ] = useState(false);
+    const [ todoId, setTodoId ] = useState(null);
 
     const handleForm = (event) => {
         setForm({...form, [event.target.name]: event.target.value});
     }
 
-    const showModal = () => {
-        setIsModalVisible(true);
+    const showModalCreate = () => {
+        setIsModalCreateVisible(true);
+    }
+
+    const showModalEdit = (item) => {
+        setForm({title: item.title, description: item.description});
+        setTodoId(item._id);
+        setIsModalEditVisible(true);
     }
 
     const closeModal = () => {
-        setIsModalVisible(false);
+        setIsModalEditVisible(false);
+        setIsModalCreateVisible(false);
         inputTitle.current.value = '';
         inputDescription.current.value = '';
     }
@@ -33,11 +45,24 @@ const Main = () => {
         try {
             const data = await request('/api/todo/create', 'POST', {...form}, { Authorization: `Bearer ${auth.token}`});
             setTodoList([...todoList, data]);
+            setShouldUpdate(true);
             closeModal();
         }
         catch (error) {
             console.log(error);
         };
+    }
+
+    const handleChange = async () => {
+        try {
+            setShouldUpdate(true);
+            await request('/api/todo/edit', 'PUT', {...form, _id: todoId}, { Authorization: `Bearer ${auth.token}`});
+            setShouldUpdate(true);
+            closeModal();
+        }
+        catch (error) {
+            console.log('Todo wasn\'t changed', error)
+        }
     }
 
     const getTodos = async () => {
@@ -52,51 +77,44 @@ const Main = () => {
 
     useEffect(() => {
         getTodos();
-    }, []);
-
-    useEffect(() => {
-        console.log(todoList)
-    }, [todoList]);
+        return (
+            function() {
+                setShouldUpdate(false);
+            }
+        )
+    }, [shouldUpdate]);
 
     return (
         <div className="main">
-            <Todos todos={todoList}/>
-            <div
-                className="modal__overlay"
-                style={{display: isModalVisible ? 'flex' : 'none'}}>
-                <div className="modal">
-                    <div className="modal__header">Create your todo item</div>
-                    <div className="modal__description">
-                        <input
-                            type="text"
-                            name="title"
-                            className="field field__title"
-                            placeholder="Title"
-                            onChange={handleForm}
-                            ref={inputTitle}/>
-                        <textarea
-                            name="description"
-                            className="field field__description"
-                            placeholder="Description"
-                            onChange={handleForm}
-                            ref={inputDescription}/>
-                    </div>
-                    <div className="modal__footer">
-                        <button
-                            className="modal__button button"
-                            onClick={handleSubmit}
-                            disabled={loading}>Submit</button>
-                        <button
-                            className="modal__button button"
-                            onClick={closeModal}
-                            disabled={loading}>Cancel</button>
-                    </div>
-                </div>
-            </div>
+            <Todos
+                todos={todoList}
+                showModalEdit={showModalEdit}
+                setShouldUpdate={setShouldUpdate}/>
+            <ModalEdit
+                isModalEditVisible={isModalEditVisible}
+                handleForm={handleForm}
+                handleChange={handleChange}
+                inputTitle={inputTitle}
+                closeModal={closeModal}
+                loading={loading}
+                inputDescription={inputDescription}
+                form={form}/>
+            <ModalCreate
+                isModalCreateVisible={isModalCreateVisible}
+                handleForm={handleForm}
+                handleSubmit={handleSubmit}
+                handleChange={handleChange}
+                inputTitle={inputTitle}
+                closeModal={closeModal}
+                loading={loading}
+                inputDescription={inputDescription}
+                form={form}/>
             <button
                 className="main__create-button button"
-                onClick={showModal}
-                disabled={isModalVisible || loading}>+</button>
+                onClick={showModalCreate}
+                disabled={isModalEditVisible || isModalCreateVisible || loading}>
+                    +
+            </button>
         </div>
     )
 }

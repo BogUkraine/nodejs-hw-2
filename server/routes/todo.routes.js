@@ -2,7 +2,6 @@ const {Router} = require('express');
 const Todo = require('../models/Todo');
 const auth = require('../middleware/auth.middleware');
 const router = Router();
-const config = require('config');
 
 router.post('/create', auth, async (req, res) => {
     try {
@@ -10,10 +9,10 @@ router.post('/create', auth, async (req, res) => {
 
         const todo = new Todo({title, description, owner: req.user.userId});
         await todo.save();
-        res.status(201).json({ message: "Todo was created" });
+        res.status(201).json({ message: 'Todo was created' });
     }
     catch (error) {
-        res.status(500).json({message: 'Something went wrong'});
+        res.status(500).json({message: 'Todo wasn\'t created'});
     }
 });
 
@@ -23,43 +22,38 @@ router.get('/', auth, async (req, res) => {
         res.json(todos);
     }
     catch (error) {
-        res.status(500).json({message: 'Something went wrong'});
+        res.status(500).json({message: 'Something went wrong, can\'t show you todos'});
     }
 });
 
 router.delete('/delete', auth, async (req, res) => {
     try {
-        await Todo.findOneAndRemove({_id: req.body._id}, (error) => {
-            if(error) {
-                res.json({ massage: "Failed to delete todo" });
-            }
-            else {
-                res.json({ massage: "Todo was successfully deleted" });
-            }
-        });
-
-        res.status(201).json({ message: "Todo was deleted" });
+        await Todo.findOneAndRemove({_id: req.body._id, owner: req.user.userId});
+        res.status(201).json({message: 'Todo was successfully deleted'});
     }
     catch (error) {
-        res.status(500).json({message: 'Something went wrong'});
+        res.status(500).json({message: 'Todo wasn\'t deleted'});
     }
 });
 
 router.put('/check' , auth, async (req, res) => {
     try {
-        await Todo.findOneAndUpdate({_id: req.body._id}, {isDone: req.body.isDone},(error) => {
-            if(error) {
-                res.json({ massage: "Failed to update todo" });
-            }
-            else {
-                res.json({ massage: "Todo was successfully updated" });
-            }
-        });
-
-        //res.status(201).json({message: "Todo was successfully updated" });
+        await Todo.findOneAndUpdate({_id: req.body._id, owner: req.user.userId}, {isDone: req.body.isDone});
+        res.status(201).json({message: 'Todo was successfully updated'});
     }
     catch (error) {
-        res.status(500).json({message: 'Something went wrong'});
+        res.status(500).json({message: 'Todo wasn\'t updated'});
+    }
+});
+
+router.put('/edit' , auth, async (req, res) => {
+    try {
+        await Todo.findOneAndUpdate({_id: req.body._id, owner: req.user.userId},
+            {title: req.body.title, description: req.body.description});
+        res.status(201).json({message: 'Todo was successfully updated'});
+    }
+    catch (error) {
+        res.status(500).json({message: 'Todo wasn\'t updated'});
     }
 })
 

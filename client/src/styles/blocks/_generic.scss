@@ -26,6 +26,10 @@ body {
         cursor: initial;
         background-color: $button-disabled-color;
     }
+
+    &--red {
+        background-color: $button-warning-background-color;
+    }
 }
 
 .field {
@@ -44,13 +48,13 @@ body {
     position: relative;
 }
 
-.checker__label .checker__box {
+.checker__box {
     position: absolute;
     opacity: 0;
     cursor: pointer;
 }
 
-.checker__label .checker__span {
+.checker__span {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -62,7 +66,7 @@ body {
     border: 2px solid white;
 }
 
-.checker__label .checker__span:after {
+.checker__span:after {
     position: absolute;
     content: '';
     left: 12px;
@@ -76,7 +80,7 @@ body {
     opacity: 1;
 }
 
-.checker__label .checker__box:checked ~ .checker__span {
+.checker__box:checked + .checker__span {
     background-color: white;
     border-radius: 5px;
     transform: rotate(0deg) scale(1);
@@ -84,7 +88,7 @@ body {
     border: 2px solid white;
 }
 
-.checker__label .checker__box:checked ~ .checker__span:after {
+.checker__box:checked + .checker__span:after {
     transform: rotate(45deg) scale(1);
     opacity: 1;
     left: 8px;
@@ -97,11 +101,11 @@ body {
     border-radius: 0;
 }
 
-.checker__label .checker__span {
+.checker__span {
     transition: all 0.3s ease;
 }
 
-.checker__label .checker__span::after {
+.checker__span::after {
     transition: all 0.3s ease;
 }
 

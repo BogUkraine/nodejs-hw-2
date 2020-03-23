@@ -36,7 +36,7 @@ async (req, res) => {
         res.status(201).json({ message: "User was created" });
     }
     catch (error) {
-        res.status(500).json({message: 'Sonething went wrong'});
+        res.status(500).json({message: 'User wasn\'t created'});
     }
 })
 
@@ -75,7 +75,7 @@ router.post('/login', [
         res.json({ token, userId: user.id });
     }
     catch (error) {
-        res.status(500).json({message: 'Sonething went wrong'});
+        res.status(500).json({message: 'Something went wrong'});
     }
 })
 

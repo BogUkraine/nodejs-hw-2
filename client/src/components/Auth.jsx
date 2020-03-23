@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import useHttp from '../hooks/http.hook';
 import Warning from './Warning';
 import AuthContext from '../context/AuthContext';
 
 const Auth = () => {
+    const history = useHistory();
     const auth = useContext(AuthContext);
     const {loading, error, request, clearError} = useHttp();
     const [ isFirstCall, setIsFirstCall ] = useState(true);
@@ -27,6 +29,7 @@ const Auth = () => {
     const registerHandler = async () => {
         try {
             const data = await request('/api/auth/register', 'POST', {...form});
+            auth.login(data.token, data.userId);
             console.log(data.message);
         }
         catch(error){
