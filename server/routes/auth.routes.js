@@ -11,14 +11,13 @@ router.post(
     [
         check('login', 'login must contain more than 3 symbols').isLength({min: 3}),
         check('password', 'Password must contain more than 6 symbols').isLength({min: 6})
-        ],
-async (req, res) => {
+        ], async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
-              errors: errors.array(),
-              message: 'Wrong data in registration fields'
+                errors: errors.array(),
+                message: 'Wrong data in registration fields'
             })
         }
 
@@ -49,8 +48,8 @@ router.post('/login', [
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
-              errors: errors.array(),
-              message: 'Wrong data in login fields'
+                errors: errors.array(),
+                message: 'Wrong data in login fields'
             })
         }
 
@@ -72,7 +71,7 @@ router.post('/login', [
             { expiresIn: '1h'}
         )    
 
-        res.json({ token, userId: user.id });
+        res.status(201).json({ token, userId: user.id });
     }
     catch (error) {
         res.status(500).json({message: 'Something went wrong'});
